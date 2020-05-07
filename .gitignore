@@ -1,0 +1,11 @@
+/.gradle/
+/.idea/
+*.DS_Store
+*.gitgore
+gradle.properties
+*-dev.yml
+/build/
+/log/
+/**/build/
+/*.iml
+/*/**/*.iml

@@ -1,0 +1,61 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    primary:
+      type: com.alibaba.druid.pool.DruidDataSource
+      url: jdbc:mysql://10.0.11.21:33067/RVM3_TEST?characterEncoding=utf8&useSSL=false&rewriteBatchedStatements=true&serverTimezone=GMT%2B8
+      username: root
+      #     password: 123456
+      #password: Incar@2019
+      password: root
+      druid:
+        stat-view-servlet:
+          enabled: true
+          loginUsername: root
+          loginPassword: Incar@2019
+          resetEnable: true
+        initial-size: 5
+        min-idle: 10
+        max-active: 30
+        max-wait: 15000
+        time-between-eviction-runs-millis: 60000
+        min-evictable-idle-time-millis: 30000
+        validation-query: SELECT 'x'
+        test-while-idle: true
+        test-on-borrow: true
+        test-on-return: false
+        filters: 'stat,wall'
+        #remove-abandoned: true
+        #remove-abandoned-timeout: 1800
+        #log-abandoned: true
+      driverClassName: com.mysql.cj.jdbc.Driver
+    secondary:
+      type: com.alibaba.druid.pool.DruidDataSource
+      url: jdbc:phoenix:10.0.11.34:2181
+      druid:
+        initial-size: 0
+        min-idle: 0
+        max-active: 10
+        max-wait: 15000
+        time-between-eviction-runs-millis: 60000
+        min-evictable-idle-time-millis: 30000
+        validation-query: SELECT 'x'
+        test-while-idle: false
+        test-on-borrow: true
+        test-on-return: true
+        # 不能要wall
+        filters: 'stat'
+        #remove-abandoned: true
+        #remove-abandoned-timeout: 1800
+        #~log-abandoned: true
+      driverClassName: org.apache.phoenix.jdbc.PhoenixDriver
+
+server:
+  port: 8080
+sm:
+  rvm:
+    # 批量插入mysql的数据量
+    batchSize: 1000
+    # 查询数据的线程
+    queryTask: 5

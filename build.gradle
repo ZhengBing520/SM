@@ -1,0 +1,94 @@
+group 'com.incarcloud'
+version '1.0-SNAPSHOT'
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'org.springframework.boot'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+compileJava {
+    options.encoding = "utf-8"
+    options.compilerArgs << "-Xlint:unchecked"
+}
+dependencies {
+    compile("com.incarcloud:incar-vault:1.3.1")
+
+    //springboot websocket支持
+    compile("org.springframework.boot:spring-boot-starter:${springBootVersion}")
+    //springboot web支持
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    //springboot test支持
+    compile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+    compile("com.alibaba:fastjson:1.2.56")
+    compile("org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}")
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile("io.springfox:springfox-swagger2:2.7.0")
+    compile("io.springfox:springfox-swagger-ui:2.7.0")
+
+    //mysql驱动包
+    runtime("mysql:mysql-connector-java:${mysqlVersion}")
+    compile("com.alibaba:druid-spring-boot-starter:${druidVersion}")
+
+    // https://mvnrepository.com/artifact/org.apache.phoenix/phoenix-core
+    compile("org.apache.phoenix:phoenix-core:4.14.0-cdh5.13.2") {
+        exclude module: "servlet-api"
+        exclude module: "jsp-2.1"
+        exclude module: "slf4j-log4j12"
+        exclude module: "gson"
+    }
+
+    compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
+}
+bootJar {
+    manifest {
+        attributes 'Start-Class': 'com.incarcloud.App'
+    }
+}
+
+bootRun {
+    /**
+     * 启动时候带入jvm的参数;如下(启动jvisualvm监控)
+     * nohup gradle bootRun -PjvmArgs="-Djava.rmi.server.hostname=172.16.24.36 -Dcom.sun.management.jmxremote.port=10001 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=true" &
+     */
+    if (project.hasProperty('jvmArgs')) {
+        jvmArgs = (project.jvmArgs.split("\\s+") as List)
+    }
+}
+
+
+
+bootJar {
+    enabled = true
+}
+
+jar {
+    enabled = true
+}
+
+defaultTasks "bootJar"
+
+buildscript {
+    ext {
+        springBootVersion = '2.1.7.RELEASE'
+        kafkaVersion = '2.2.7.RELEASE'
+        mavenRepoUrl = 'http://maven.aliyun.com/nexus/content/groups/public/'
+        mysqlVersion = '6.0.6'
+        druidVersion = '1.1.10'
+    }
+    repositories {
+        maven {
+            url MAVEN_REPO_MIRROR_URL
+        }
+        maven { url "${mavenRepoUrl}" }
+//        maven { url 'https://repository.cloudera.com/artifactory/cloudera-repos/' }
+//        maven { url 'http://central.maven.org/maven2/' }
+        mavenLocal()
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        //使用springboot框架
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE")
+    }
+}
