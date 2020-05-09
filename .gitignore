@@ -2,7 +2,7 @@
 /.idea/
 *.DS_Store
 *.gitgore
-gradle.properties
+#gradle.properties
 *-dev.yml
 /build/
 /log/
