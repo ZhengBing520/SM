@@ -1,4 +1,4 @@
-package incarcloud.rvm.config.swagger;
+package com.incarcloud.rvm.config.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

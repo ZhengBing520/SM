@@ -1,4 +1,4 @@
-package incarcloud.rvm.controller;
+package com.incarcloud.rvm.controller;
 
 import com.incarcloud.rvm.service.SmPvoBasicStatisticsService;
 import io.swagger.annotations.Api;

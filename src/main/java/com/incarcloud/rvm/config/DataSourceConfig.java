@@ -1,4 +1,4 @@
-package incarcloud.rvm.config;
+package com.incarcloud.rvm.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;

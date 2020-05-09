@@ -1,4 +1,4 @@
-package incarcloud.rvm.bean;
+package com.incarcloud.rvm.bean;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -14,6 +14,9 @@ public class SmPvoBasicBean implements Serializable {
 
     @ApiModelProperty(value = "车型")
     private String vehicleModel;
+
+    @ApiModelProperty(value = "总上线天数")
+    private Integer totalDay;
 
     @ApiModelProperty(value = "总行驶时间(s)")
     private Double totalRuntime;
@@ -35,6 +38,14 @@ public class SmPvoBasicBean implements Serializable {
 
     public void setVehicleModel(String vehicleModel) {
         this.vehicleModel = vehicleModel;
+    }
+
+    public Integer getTotalDay() {
+        return totalDay;
+    }
+
+    public void setTotalDay(Integer totalDay) {
+        this.totalDay = totalDay;
     }
 
     public Double getTotalRuntime() {

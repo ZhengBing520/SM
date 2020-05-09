@@ -68,6 +68,17 @@ jar {
 
 defaultTasks "bootJar"
 
+repositories {
+    maven {
+        url MAVEN_REPO_MIRROR_URL
+    }
+    maven { url "${mavenRepoUrl}" }
+        maven { url 'https://repository.cloudera.com/artifactory/cloudera-repos/' }
+        maven { url 'http://central.maven.org/maven2/' }
+    mavenLocal()
+    mavenCentral()
+}
+
 buildscript {
     ext {
         springBootVersion = '2.1.7.RELEASE'

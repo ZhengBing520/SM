@@ -1,4 +1,4 @@
-package incarcloud.rvm.util;
+package com.incarcloud.rvm.util;
 
 import org.apache.commons.lang.StringUtils;
 

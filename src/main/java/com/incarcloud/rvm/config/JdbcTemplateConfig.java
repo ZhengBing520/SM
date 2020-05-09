@@ -1,4 +1,4 @@
-package incarcloud.rvm.config;
+package com.incarcloud.rvm.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

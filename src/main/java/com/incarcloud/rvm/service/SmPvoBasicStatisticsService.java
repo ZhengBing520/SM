@@ -1,4 +1,4 @@
-package incarcloud.rvm.service;
+package com.incarcloud.rvm.service;
 
 import com.incarcloud.concurrent.LimitedSyncTask;
 import com.incarcloud.rvm.bean.SmPvoBasicBean;
@@ -74,6 +74,7 @@ public class SmPvoBasicStatisticsService {
             SmPvoBasicBean bean = new SmPvoBasicBean();
             bean.setVin(k);
             bean.setVehicleModel(v.get(0).getVehicleModel());
+            bean.setTotalDay(v.size());
             double totalMileage = v.stream().mapToDouble(SmPvoBasicStatisticsBean::getTodayMileage).sum();
             bean.setTotalMileage(totalMileage);
             double totalRuntime = v.stream().mapToDouble(SmPvoBasicStatisticsBean::getTodayRuntime).sum();
@@ -89,7 +90,7 @@ public class SmPvoBasicStatisticsService {
         if (CollectionUtils.isEmpty(list)) {
             return false;
         }
-        String sql = "insert into sm_pvo_basic(vin,vehicle_model,total_runtime,total_mileage) values (?,?,?,?)";
+        String sql = "insert into sm_pvo_basic(vin,vehicle_model,total_day,total_runtime,total_mileage) values (?,?,?,?,?)";
         // 将list分批，一批1000
         int pageSize = list.size() % batchSize == 0 ? list.size() / batchSize : list.size() / batchSize + 1;
         for (int i = 1; i <= pageSize; i++) {
@@ -123,8 +124,9 @@ public class SmPvoBasicStatisticsService {
                 if (Objects.nonNull(smPvoBasicBean)) {
                     ps.setString(1, smPvoBasicBean.getVin());
                     ps.setString(2, smPvoBasicBean.getVehicleModel());
-                    ps.setDouble(3, smPvoBasicBean.getTotalRuntime());
-                    ps.setDouble(4, smPvoBasicBean.getTotalMileage());
+                    ps.setInt(3, smPvoBasicBean.getTotalDay());
+                    ps.setDouble(4, smPvoBasicBean.getTotalRuntime());
+                    ps.setDouble(5, smPvoBasicBean.getTotalMileage());
                 }
             }
 
@@ -195,7 +197,11 @@ public class SmPvoBasicStatisticsService {
 
     private List<SmPvoBasicStatisticsBean> queryData(String sql, String day) {
         List<SmPvoBasicStatisticsBean> query = phoenixJdbcTemplate.query(sql, new BeanPropertyRowMapper<>(SmPvoBasicStatisticsBean.class), day);
-        return query;
+        if (CollectionUtils.isEmpty(query)) {
+            return query;
+        }
+        // 加上规则剔除里程为负的值
+        return query.stream().filter(smPvoBasicStatisticsBean -> Objects.nonNull(smPvoBasicStatisticsBean.getTodayMileage()) && 0 <= smPvoBasicStatisticsBean.getTodayMileage()).collect(Collectors.toList());
     }
 
 }

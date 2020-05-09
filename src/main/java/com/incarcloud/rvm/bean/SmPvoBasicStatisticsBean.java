@@ -1,4 +1,4 @@
-package incarcloud.rvm.bean;
+package com.incarcloud.rvm.bean;
 
 import io.swagger.annotations.ApiModelProperty;
 
