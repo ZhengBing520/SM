@@ -200,8 +200,39 @@ public class SmPvoBasicStatisticsService {
         if (CollectionUtils.isEmpty(query)) {
             return query;
         }
-        // 加上规则剔除里程为负的值
-        return query.stream().filter(smPvoBasicStatisticsBean -> Objects.nonNull(smPvoBasicStatisticsBean.getTodayMileage()) && 0 <= smPvoBasicStatisticsBean.getTodayMileage()).collect(Collectors.toList());
+        // 加上规则
+
+        return query.stream().filter(this::filter).collect(Collectors.toList());
+    }
+
+    /**
+     * 过滤规则
+     * @param smPvoBasicStatisticsBean
+     * @return
+     */
+    private boolean filter(SmPvoBasicStatisticsBean smPvoBasicStatisticsBean) {
+        if (Objects.isNull(smPvoBasicStatisticsBean)) {
+            return false;
+        }
+        Double todayMileage = smPvoBasicStatisticsBean.getTodayMileage();
+        if (Objects.isNull(todayMileage)) {
+            return false;
+        }
+        // 单日行驶里程要求[0,5760]km
+        if (0 > todayMileage || 5760 < todayMileage) {
+            return false;
+        }
+
+        Double todayRuntime = smPvoBasicStatisticsBean.getTodayRuntime();
+        if (Objects.isNull(todayRuntime)) {
+            return false;
+        }
+        // 单日行驶时长[0,1440]min -> todayMileage的单位是秒 86,400‬
+        if (0 > todayRuntime || 86400 < todayRuntime) {
+            return false;
+        }
+
+        return true;
     }
 
 }
